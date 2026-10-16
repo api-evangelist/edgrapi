@@ -1,0 +1,15 @@
+generated: '2026-10-16'
+method: probed
+generator: harvest-packages.py
+source: registry metadata endpoints (registry.npmjs.org, pypi.org, rubygems.org, api.nuget.org, packagist.org, crates.io)
+ownership_rule: 'official: true only when the registry metadata (homepage, repository, author, URLs) names the provider''s domain (edgrapi.com,
+  postman.com, security/edgrapi-domain-security.yml, security/edgrapi-vulnerability-disclosure.yml) or its accepted GitHub org.'
+packages:
+- name: edgrapi
+  registry: pypi
+  url: https://pypi.org/project/edgrapi/
+  language: Python
+  official: true
+  version: 1.1.0
+  published: '2026-09-23'
+  evidence: metadata names edgrapi.com

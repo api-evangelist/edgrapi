@@ -1,0 +1,20 @@
+generated: '2026-10-16'
+method: derived
+generator: derive-problem-types.py
+source:
+- openapi/edgrapi-openapi.json
+format: custom
+envelope:
+  media_type: application/json
+  schema: HTTPValidationError
+coverage:
+  operations: 33
+  statuses_declared: 1
+problems:
+- status: 422
+  title: Unprocessable Content
+  description: Validation Error
+  operations: 29
+  media_types:
+  - application/json
+  schema: HTTPValidationError

@@ -1,0 +1,93 @@
+generated: '2026-10-16'
+method: derived
+source: the pre-flight dossier, apis.yml pointers, spec servers, well-known, vendors -- nothing fetched here
+generator: derive-hosts.py
+summary:
+  hosts: 5
+  own: 2
+  other_domain: 1
+  platform: 2
+  roles:
+  - api
+  - collections
+  - other
+  - portal
+  - website
+hosts:
+- host: api.edgrapi.com
+  found_by:
+  - probed
+  - site-links
+  - docs-index
+  - spec-found
+  - contract-discovery
+  - well-known
+  types: []
+  serves:
+  - docs
+  - spec
+  registrable_domain: edgrapi.com
+  role: api
+  relation: own
+- host: api.edgrapi.com<
+  found_by:
+  - pointer
+  types:
+  - DeveloperPortal
+  serves: []
+  registrable_domain: edgrapi.com<
+  role: portal
+  relation: other-domain
+- host: edgrapi.com
+  found_by:
+  - pointer
+  - apis[]
+  - probed
+  - docs-index
+  - spec-found
+  - contract-discovery
+  - well-known
+  - vendor-detect
+  types:
+  - Security
+  - StatusPage
+  - Website
+  - Documentation
+  - APIReference
+  - GettingStarted
+  - Support
+  - Blog
+  - Pricing
+  - SignUp
+  - TermsOfService
+  - PrivacyPolicy
+  serves:
+  - api
+  - docs
+  - spec
+  - cdn
+  vendor: cloudflare
+  registrable_domain: edgrapi.com
+  role: website
+  relation: own
+- host: github.com
+  found_by:
+  - docs-index
+  types: []
+  serves:
+  - docs
+  registrable_domain: github.com
+  role: other
+  relation: platform
+- host: www.postman.com
+  found_by:
+  - pointer
+  - vendor-detect
+  types:
+  - Postman
+  serves:
+  - api-collections
+  vendor: postman
+  registrable_domain: postman.com
+  role: collections
+  relation: platform

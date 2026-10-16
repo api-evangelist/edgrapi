@@ -1,0 +1,49 @@
+# Edgrapi — US Government Data API
+
+> Official US government data as clean JSON for developers and AI agents, on one API key and one consistent schema. SEC EDGAR filings — insider trades (Form 4), 8-K material events, 13F fund holdings, 13D/13G activist stakes, plus normalized financial statements, ratios and 10-K/10-Q section text for any US-listed ticker. Federal data — SAM.gov contract opportunities, USAspending spending awards, Grants.gov grant opportunities, and US House Congress stock trades. Free tier: 50 credits, no card. All sources are free, official and public-domain; the value is the parsing and normalization most pipelines get wrong — aggregating a 13F across sub-managers so a position is not double-counted, treating a put as a bearish bet, handling the 2023 dollars switch, XBRL tags that drift across companies, and each agency's own quirky payload. Edgrapi returns the correct JSON, not just clean JSON.
+
+Auth: `X-API-Key: edgr_...` (or `Authorization: Bearer edgr_...`). Base URL: `https://api.edgrapi.com`. Responses are JSON; failures return an `error` field.
+
+## Get a key in 30 seconds
+- [Sign up free](https://edgrapi.com/app): 50 free credits, no credit card. The same key works for REST, the MCP server, and the agent skills.
+- [Pricing](https://edgrapi.com/pricing): Free → Starter $10/mo (10,000 credits) → Pro $29/mo (30,000 credits) or $290/yr (360,000 credits). Pay-as-you-go credit packs from $7 (no subscription, buy on any plan including free). Calls debit credits by weight: company/filings/events 1, fundamentals/ratios 3, sections/insider/holdings/activist 5. Webhook delivery is free. Credits never expire.
+
+## Endpoints (REST)
+- GET /v1/insider/{ticker} — parsed Form 4 insider trades: owner, role, code (P/S/A/M/F), shares, price, value, 10b5-1 flag
+- GET /v1/form144/{ticker} — parsed Form 144 notices of proposed sale (intent-to-sell, precedes the Form 4): seller, relationship, shares to sell, market value, approx sale date, broker
+- GET /v1/holdings/{fund} — parsed 13F holdings by fund (name, CIK, or filer ticker): positions aggregated by CUSIP across sub-managers, ticker-resolved, diffed vs last quarter
+- GET /v1/activist/{ticker} — Schedule 13D/13G filings: >5% activist and passive stakes, by issuer
+- GET /v1/events/{ticker}?notable=true&item=4.02 — 8-K material events as typed items (2.02 earnings, 5.02 exec change, 1.05 cyber); filter to one item code
+- GET /v1/events/restatements and /v1/events/auditor-changes — market-wide red-flag feeds: recent 8-K item 4.02 (non-reliance restatements) and 4.01 (auditor changes) across all filers
+- POST /v1/webhooks — register a URL + watchlist; get a signed POST the moment a watched company files a Form 4 or 8-K
+- GET /v1/company/{ticker} — profile: CIK, legal name, SIC industry, exchange, fiscal-year end
+- GET /v1/resolve?ticker=|cik=|cusip= — map any ticker, CIK, or CUSIP to the canonical entity: name, CIK, tickers, exchange, SIC industry+sector, state, location
+- GET /v1/search/fulltext?q=&forms=&startdt=&enddt= — full-text search across every SEC filing since 2001; returns matching documents with company, form, date, 8-K items, and a SEC.gov link
+- GET /v1/fundamentals/{ticker}?period=annual|quarterly&limit=N — income statement, balance sheet, cash flow
+- GET /v1/xbrl/{ticker|cik} — full XBRL->JSON: normalized statements across ALL periods + an index of every us-gaap/dei concept; ?concept=Tag pulls any raw tag series; /v1/xbrl/by-accession/{accession} returns one filing's concepts
+- GET /v1/ratios/{ticker} — margins, ROE/ROA, leverage, liquidity, growth (pre-computed)
+- GET /v1/shares/{ticker} — common shares outstanding (latest + history) and public float from the XBRL cover page; add ?history=true for the full series
+- GET /v1/formd/{cik} and /v1/formd/latest — parsed Form D private-placement (Reg D) notices: issuer, jurisdiction, industry, amount offered/sold, exemption, related persons, date of first sale
+- GET /v1/subsidiaries/{ticker} — the company's subsidiaries and jurisdictions of incorporation, parsed from its latest 10-K Exhibit 21
+- GET /v1/filings/{ticker}?form=10-K — recent 10-K/10-Q/8-K filings with document links
+- GET /v1/download?accession=&file= — fetch a filing's document straight from the EDGAR archive through the politeness gate + cache (primary document by default; ?file= for a specific exhibit)
+- GET /v1/sections/{ticker}?form=10-K&item=1A — 10-K/10-Q narrative sections (Risk Factors, MD&A, Business) as clean text
+- GET /v1/opportunities?postedFrom=&postedTo=&naics=&state=&setAside= — federal contract opportunities from SAM.gov (solicitations, presolicitations, sources-sought, award notices) as flat JSON; leave dates off for the recent feed
+- GET /v1/awards?category=&keyword=&agency=&recipient=&state= — federal spending awards from USAspending.gov (contracts, grants, loans, direct payments) as flat JSON; one category per call, leave dates off for the last year
+- GET /v1/grants?keyword=&status=&agency=&aln= — federal grant funding opportunities from Grants.gov as flat JSON; defaults to open (posted + forecasted), with CFDA numbers and the grants.gov link
+- GET /v1/congress and /v1/congress/{ticker} — congressional stock trades from US House STOCK Act filings (member, ticker, buy/sell, dollar range, dates, disclosure PDF); House-only for now, up to 45-day disclosure lag
+
+## Use Edgrapi from any AI agent
+- [Hosted MCP server](https://api.edgrapi.com/mcp): JSON-RPC 2.0 over streamable-http. Drop into Claude Desktop, Claude Code, Cursor, or any MCP client with one config line. Tools: get_insider, get_events, get_holdings, get_activist, get_fundamentals, get_ratios, get_company, get_filings, get_sections, resolve_entity, search_filings, get_xbrl, get_shares, get_form_d, get_subsidiaries, get_opportunities, get_awards, get_grants, get_congress.
+- [Agent skills (MIT-0)](https://github.com/paperandbeyond23-gif/edgrapi-skills): `npx skills add paperandbeyond23-gif/edgrapi-skills --skill edgrapi-full` — drop-in Python skills, no dependencies.
+- [Agents & MCP guide](https://edgrapi.com/agents): setup for Claude, Cursor, and function-calling agents.
+
+## Learn more
+- [Docs](https://edgrapi.com/docs) · [API reference](https://edgrapi.com/docs/api/company) · [Blog](https://edgrapi.com/blog) · [Compare](https://edgrapi.com/compare)
+- [The SEC EDGAR API: complete guide](https://edgrapi.com/blog/sec-edgar-api): what the SEC API is, every endpoint, real rate limits, and why normalization matters.
+
+## Notes
+- Data source: public SEC EDGAR XBRL (companyfacts/submissions). USD. Not investment advice.
+- Coverage: 10,400+ US-listed tickers, plus 13F fund portfolios and 13D/13G filings by issuer.
+- OpenAPI: https://api.edgrapi.com/openapi.json
+- Independent service, not affiliated with or endorsed by the U.S. SEC.

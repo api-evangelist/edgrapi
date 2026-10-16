@@ -1,0 +1,90 @@
+generated: '2026-10-16'
+method: searched
+generator: extract-docs-artifacts.py (local)
+source: https://edgrapi.com/pricing
+sources:
+- https://edgrapi.com/pricing
+- https://edgrapi.com/docs/rate-limits
+name: Paper and Beyond pricing
+audience: developer-api
+pricing_basis: tiered-subscription
+plans:
+- name: Free
+  price_text: $0
+  price: 0
+  description: 100 credits / month, no card required
+  features:
+  - All endpoints + MCP
+  - Credits roll over
+  - No per‑seat pricing
+  limits:
+  - name: credits_per_month
+    limit_text: 100 / month
+- name: Starter
+  price_text: $10 /mo
+  price: 10
+  description: 10,000 credits / month, unlimited saved searches
+  features:
+  - All endpoints + MCP
+  - Credits roll over
+  limits:
+  - name: credits_per_month
+    limit_text: 10,000 / month
+- name: Pro (monthly)
+  price_text: $29 /mo
+  price: 29
+  description: 30,000 credits / month, unlimited saved searches
+  features:
+  - All endpoints + MCP
+  - Credits roll over
+  limits:
+  - name: credits_per_month
+    limit_text: 30,000 / month
+- name: Pro (annual)
+  price_text: $290 /yr
+  price: 290
+  description: 360,000 credits up front, 2 months free
+  features:
+  - All endpoints + MCP
+  - Credits roll over
+  limits:
+  - name: credits_total
+    limit_text: 360,000 up front
+- name: Business
+  price_text: $99 /mo
+  price: 99
+  description: 150,000 credits / month, unlimited saved searches, production apps
+  features:
+  - All endpoints + MCP
+  - Credits roll over
+  limits:
+  - name: credits_per_month
+    limit_text: 150,000 / month
+- name: Pay as you go – 5,000 credits
+  price_text: $7
+  price: 7
+  description: One‑time purchase, credits never expire
+  features:
+  - No subscription needed
+  limits:
+  - name: credits
+    limit_text: 5,000 credits
+- name: Pay as you go – 15,000 credits
+  price_text: $18
+  price: 18
+  description: One‑time purchase, credits never expire
+  features:
+  - No subscription needed
+  limits:
+  - name: credits
+    limit_text: 15,000 credits
+- name: Pay as you go – 50,000 credits
+  price_text: $55
+  price: 55
+  description: One‑time purchase, credits never expire
+  features:
+  - No subscription needed
+  limits:
+  - name: credits
+    limit_text: 50,000 credits
+docs: https://edgrapi.com/pricing

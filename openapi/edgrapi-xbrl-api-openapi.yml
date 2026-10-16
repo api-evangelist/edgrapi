@@ -1,0 +1,145 @@
+openapi: 3.2.0
+info:
+  title: Edgrapi — US Government Data Xbrl API
+  description: Official US government data as clean JSON on one API key. SEC EDGAR filings (insider Form 4 trades, 8-K events, 13F fund holdings, 13D/13G activist stakes, financial statements and ratios), SAM.gov federal contract opportunities, USAspending awards, Grants.gov grant opportunities, and US House Congress stock trades. Hosted MCP server plus REST, with real-time webhooks when a watched company files. One key, one normalized schema.
+  contact:
+    name: Edgrapi
+    url: https://edgrapi.com/
+  license:
+    name: Proprietary
+  version: 1.0.0
+tags:
+- name: xbrl
+paths:
+  /v1/xbrl/by-accession/{accession}:
+    get:
+      tags:
+      - xbrl
+      summary: All XBRL concepts reported in one filing
+      description: 'Every XBRL concept value reported in a single filing, matched on the accession
+
+        number. Reconstructs one filing''s structured data — each concept with its tag,
+
+        label, unit, value, and period.'
+      operationId: xbrl_by_accession_v1_xbrl_by_accession__accession__get
+      parameters:
+      - name: accession
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Accession number, e.g. 0000320193-24-000123
+          title: Accession
+        description: Accession number, e.g. 0000320193-24-000123
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/xbrl/{ident}:
+    get:
+      tags:
+      - xbrl
+      summary: Full XBRL financials as JSON
+      description: 'Convert a company''s full SEC XBRL (companyfacts) to JSON. By default returns the
+
+        normalized income statement, balance sheet and cash flow across every reported
+
+        period, plus a `concepts_index` of every us-gaap/dei tag the filer reports. Pass
+
+        `concept=` to pull the raw time series for any specific tag(s) — the complete
+
+        converter, not just the curated fundamentals.'
+      operationId: xbrl_v1_xbrl__ident__get
+      parameters:
+      - name: ident
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Stock ticker or CIK, e.g. AAPL or 320193
+          title: Ident
+        description: Stock ticker or CIK, e.g. AAPL or 320193
+      - name: period
+        in: query
+        required: false
+        schema:
+          type: string
+          pattern: ^(annual|quarterly)$
+          default: annual
+          title: Period
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          description: Max periods per statement
+          default: 40
+          title: Limit
+        description: Max periods per statement
+      - name: concept
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Comma-separated us-gaap/dei tag(s) to return the raw series for, e.g. Revenues,Assets. Omit for normalized statements + the full concept index.
+          title: Concept
+        description: Comma-separated us-gaap/dei tag(s) to return the raw series for, e.g. Revenues,Assets. Omit for normalized statements + the full concept index.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError

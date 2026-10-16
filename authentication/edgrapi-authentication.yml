@@ -1,0 +1,23 @@
+generated: '2026-10-16'
+method: searched
+generator: extract-docs-artifacts.py (local)
+source: https://edgrapi.com/docs/authentication
+sources:
+- https://edgrapi.com/docs/authentication
+- https://edgrapi.com/docs
+description: Authentication methods for Edgrapi as documented on the provider pages.
+schemes:
+- type: apiKey
+  name: X-API-Key
+  evidence: 'Send your key on every request in the X-API-Key header:'
+  location: header
+  header: X-API-Key
+  how_to_obtain: Create and revoke keys in your dashboard; a key is minted on signup.
+- type: http-bearer
+  name: Bearer
+  evidence: 'Use X-API-Key or Authorization: Bearer .'
+  location: header
+  header: Authorization
+  how_to_obtain: Use the same API key value prefixed with edgr_ as a bearer token.
+note: No OAuth2, JWT, HMAC, MTLS, or other schemes are described on the pages.
+docs: https://edgrapi.com/docs/authentication

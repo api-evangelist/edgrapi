@@ -1,0 +1,194 @@
+generated: "2026-10-16"
+method: derived
+source: https://edgrapi.com/.well-known/mcp/server-card.json
+crosswalk:
+  - tool: get_fundamentals
+    category: fundamentals
+    rest: [fundamentals_v1_fundamentals__ticker__get]
+    binding: direct
+    confidence: high
+  - tool: get_ratios
+    category: ratios
+    rest: [ratios_v1_ratios__ticker__get]
+    binding: direct
+    confidence: high
+  - tool: get_company
+    category: company
+    rest: [company_v1_company__ticker__get]
+    binding: direct
+    confidence: high
+  - tool: get_filings
+    category: filings
+    rest: [filings_v1_filings__ticker__get]
+    binding: direct
+    confidence: high
+  - tool: get_sections
+    category: sections
+    rest: [filing_sections_v1_sections__ticker__get]
+    binding: direct
+    confidence: high
+  - tool: get_insider
+    category: insider
+    rest: [insider_trades_v1_insider__ticker__get]
+    binding: direct
+    confidence: high
+  - tool: get_events
+    category: events
+    rest: [events_auditor_changes_v1_events_auditor_changes_get, events_restatements_v1_events_restatements_get]
+    binding: direct
+    confidence: medium
+  - tool: get_holdings
+    category: holdings
+    rest: [institutional_holdings_v1_holdings__identifier__get]
+    binding: direct
+    confidence: high
+  - tool: get_activist
+    category: activist
+    rest: [activist_stakes_v1_activist__identifier__get]
+    binding: direct
+    confidence: high
+  - tool: resolve_entity
+    category: resolve
+    rest: [resolve_entity_v1_resolve_get]
+    binding: direct
+    confidence: high
+  - tool: search_filings
+    category: search
+    rest: [search_fulltext_v1_search_fulltext_get]
+    binding: direct
+    confidence: high
+  - tool: get_xbrl
+    category: xbrl
+    rest: [xbrl_v1_xbrl__ident__get]
+    binding: direct
+    confidence: high
+  - tool: get_shares
+    category: shares
+    rest: [shares_v1_shares__ticker__get]
+    binding: direct
+    confidence: high
+  - tool: get_form_d
+    category: formd
+    rest: [formd_issuer_v1_formd__ident__get, formd_latest_v1_formd_latest_get]
+    binding: direct
+    confidence: medium
+  - tool: get_subsidiaries
+    category: subsidiaries
+    rest: [company_subsidiaries_v1_subsidiaries__ident__get]
+    binding: direct
+    confidence: high
+  - tool: get_opportunities
+    category: opportunities
+    rest: [opportunities_v1_opportunities_get]
+    binding: direct
+    confidence: high
+  - tool: get_events
+    category: congress
+    rest: [congress_feed_v1_congress_get]
+    binding: direct
+    confidence: low
+  - tool: get_events
+    category: congress_ticker
+    rest: [congress_ticker_v1_congress__ticker__get]
+    binding: direct
+    confidence: low
+  - tool: get_events
+    category: grants
+    rest: [grants_v1_grants_get]
+    binding: direct
+    confidence: low
+  - tool: get_events
+    category: health
+    rest: [health_health_get]
+    binding: direct
+    confidence: low
+  - tool: webhook_create
+    category: webhook
+    rest: [webhook_create_v1_webhooks_post]
+    binding: direct
+    confidence: high
+  - tool: webhook_delete
+    category: webhook
+    rest: [webhook_delete_v1_webhooks__wid__delete]
+    binding: direct
+    confidence: high
+  - tool: webhook_list
+    category: webhook
+    rest: [webhook_list_v1_webhooks_get]
+    binding: direct
+    confidence: high
+  - tool: webhook_test
+    category: webhook
+    rest: [webhook_test_v1_webhooks__wid__test_post]
+    binding: direct
+    confidence: high
+  - tool: webhook_deliveries
+    category: webhook
+    rest: [webhook_deliveries_v1_webhooks__wid__deliveries_get]
+    binding: direct
+    confidence: high
+  - tool: webhook_deliveries
+    category: webhook
+    rest: [webhook_deliveries_v1_webhooks__wid__deliveries_get]
+    binding: direct
+    confidence: high
+  - tool: webhook_list
+    category: webhook
+    rest: [webhook_list_v1_webhooks_get]
+    binding: direct
+    confidence: high
+  - tool: webhook_test
+    category: webhook
+    rest: [webhook_test_v1_webhooks__wid__test_post]
+    binding: direct
+    confidence: high
+  - tool: webhook_create
+    category: webhook
+    rest: [webhook_create_v1_webhooks_post]
+    binding: direct
+    confidence: high
+  - tool: webhook_delete
+    category: webhook
+    rest: [webhook_delete_v1_webhooks__wid__delete]
+    binding: direct
+    confidence: high
+  - tool: webhook_list
+    category: webhook
+    rest: [webhook_list_v1_webhooks_get]
+    binding: direct
+    confidence: high
+  - tool: webhook_test
+    category: webhook
+    rest: [webhook_test_v1_webhooks__wid__test_post]
+    binding: direct
+    confidence: high
+  - tool: webhook_deliveries
+    category: webhook
+    rest: [webhook_deliveries_v1_webhooks__wid__deliveries_get]
+    binding: direct
+    confidence: high
+  - tool: webhook_create
+    category: webhook
+    rest: [webhook_create_v1_webhooks_post]
+    binding: direct
+    confidence: high
+  - tool: webhook_delete
+    category: webhook
+    rest: [webhook_delete_v1_webhooks__wid__delete]
+    binding: direct
+    confidence: high
+  - tool: webhook_list
+    category: webhook
+    rest: [webhook_list_v1_webhooks_get]
+    binding: direct
+    confidence: high
+  - tool: webhook_test
+    category: webhook
+    rest: [webhook_test_v1_webhooks__wid__test_post]
+    binding: direct
+    confidence: high
+  - tool: webhook_deliveries
+    category: webhook
+    rest: [webhook_deliveries_v1_webhooks__wid__deliveries_get]
+    binding: direct
+    confidence: high

@@ -1,0 +1,13 @@
+generated: '2026-10-16'
+method: generated
+generator: extract-docs-artifacts.py skills (local)
+source: openapi/edgrapi-openapi.json
+skills:
+- file: skills/edgrapi-webhook-create-test-delete.md
+  name: edgrapi-webhook-create-test-delete
+  api: openapi/edgrapi-openapi.json
+  operations:
+  - webhook_create_v1_webhooks_post
+  - webhook_test_v1_webhooks__wid__test_post
+  - webhook_deliveries_v1_webhooks__wid__deliveries_get
+  - webhook_delete_v1_webhooks__wid__delete

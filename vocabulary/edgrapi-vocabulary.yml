@@ -1,0 +1,55 @@
+generated: '2026-10-16'
+method: derived
+generator: derive-vocabulary.py
+source: openapi/edgrapi-openapi.json
+vocabulary:
+  name: Paper and Beyond Domain Vocabulary
+  description: 'Terms declared by Paper and Beyond''s own API contract: its resource groups, objects and enumerations, with the contract''s definitions.
+    Derived, not authored.'
+  version: '2026-10-16'
+  terms:
+  - term: insider
+    definition: Parsed Form 4 insider trades and the market-wide buy feed.
+    tags:
+    - Resource Group
+    source: openapi/edgrapi-openapi.json
+  - term: events
+    definition: 8-K material events with parsed item codes.
+    tags:
+    - Resource Group
+    source: openapi/edgrapi-openapi.json
+  - term: webhooks
+    definition: Get a signed POST the moment a watched company files.
+    tags:
+    - Resource Group
+    source: openapi/edgrapi-openapi.json
+  - term: fundamentals
+    definition: Financial statements & ratios.
+    tags:
+    - Resource Group
+    source: openapi/edgrapi-openapi.json
+  - term: filings
+    definition: Filing history & 10-K/10-Q sections.
+    tags:
+    - Resource Group
+    source: openapi/edgrapi-openapi.json
+  - term: government
+    definition: 'US government data beyond the SEC: federal contract opportunities and more.'
+    tags:
+    - Resource Group
+    source: openapi/edgrapi-openapi.json
+  - term: meta
+    definition: Health & discovery.
+    tags:
+    - Resource Group
+    source: openapi/edgrapi-openapi.json
+  - term: HTTPValidationError
+    definition: 'Object declared by the contract with fields: detail.'
+    tags:
+    - Object
+    source: openapi/edgrapi-openapi.json#/components/schemas/HTTPValidationError
+  - term: ValidationError
+    definition: 'Object declared by the contract with fields: loc, msg, type, input, ctx.'
+    tags:
+    - Object
+    source: openapi/edgrapi-openapi.json#/components/schemas/ValidationError

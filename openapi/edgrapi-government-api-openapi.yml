@@ -1,0 +1,465 @@
+openapi: 3.2.0
+info:
+  title: Edgrapi — US Data Government API
+  description: Official US government data as clean JSON on one API key. SEC EDGAR filings (insider Form 4 trades, 8-K events, 13F fund holdings, 13D/13G activist stakes, financial statements and ratios), SAM.gov federal contract opportunities, USAspending awards, Grants.gov grant opportunities, and US House Congress stock trades. Hosted MCP server plus REST, with real-time webhooks when a watched company files. One key, one normalized schema.
+  contact:
+    name: Edgrapi
+    url: https://edgrapi.com/
+  license:
+    name: Proprietary
+  version: 1.0.0
+tags:
+- name: government
+  description: 'US government data beyond the SEC: federal contract opportunities and more.'
+paths:
+  /v1/opportunities:
+    get:
+      tags:
+      - government
+      summary: Federal contract opportunities (SAM.gov)
+      description: 'Federal contract opportunities from SAM.gov — solicitations, presolicitations,
+
+        sources-sought, and award notices — normalized into flat JSON. Each record carries
+
+        the notice id, title, solicitation number, posted date, type, set-aside, NAICS, place
+
+        of performance, award (when present), a point of contact, and the sam.gov link. SAM
+
+        caps a query window at one year; leave the dates off for the recent feed.'
+      operationId: opportunities_v1_opportunities_get
+      parameters:
+      - name: posted_from
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 'Posted-date start, YYYY-MM-DD (default: 30 days ago)'
+          title: Posted From
+        description: 'Posted-date start, YYYY-MM-DD (default: 30 days ago)'
+      - name: posted_to
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 'Posted-date end, YYYY-MM-DD (default: today)'
+          title: Posted To
+        description: 'Posted-date end, YYYY-MM-DD (default: today)'
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 200
+          minimum: 1
+          description: Records to return
+          default: 20
+          title: Limit
+        description: Records to return
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Page offset
+          default: 0
+          title: Offset
+        description: Page offset
+      - name: naics
+        in: query
+        required: false
+        schema:
+          type: string
+          description: NAICS code filter, up to 6 digits
+          title: Naics
+        description: NAICS code filter, up to 6 digits
+      - name: ptype
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 'Procurement type: o solicitation, p presolicitation, a award, etc.'
+          title: Ptype
+        description: 'Procurement type: o solicitation, p presolicitation, a award, etc.'
+      - name: state
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Place-of-performance state, e.g. TX
+          title: State
+        description: Place-of-performance state, e.g. TX
+      - name: set_aside
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Set-aside code, e.g. SBA, 8A, WOSB, HZC
+          title: Set Aside
+        description: Set-aside code, e.g. SBA, 8A, WOSB, HZC
+      - name: title
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Match on opportunity title
+          title: Title
+        description: Match on opportunity title
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/awards:
+    get:
+      tags:
+      - government
+      summary: 'Federal awards (USAspending: contracts, grants, loans)'
+      description: 'Federal spending awards from USAspending.gov — contracts, grants, loans, and
+
+        direct payments — normalized into flat JSON. Each record carries the award id,
+
+        recipient, amount, awarding agency, type, dates, place of performance, description,
+
+        and the usaspending.gov link. Pick one category per call; leave dates off for the
+
+        last year. Pairs with /v1/opportunities: a solicitation on SAM, the awards on here.'
+      operationId: awards_v1_awards_get
+      parameters:
+      - name: category
+        in: query
+        required: false
+        schema:
+          type: string
+          description: contracts, idvs, grants, loans, direct_payments, or other
+          default: contracts
+          title: Category
+        description: contracts, idvs, grants, loans, direct_payments, or other
+      - name: keyword
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Full-text keyword filter
+          title: Keyword
+        description: Full-text keyword filter
+      - name: agency
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Awarding agency, top-tier exact name, e.g. 'Department of Defense'
+          title: Agency
+        description: Awarding agency, top-tier exact name, e.g. 'Department of Defense'
+      - name: recipient
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Recipient name search, e.g. 'Lockheed'
+          title: Recipient
+        description: Recipient name search, e.g. 'Lockheed'
+      - name: state
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Place-of-performance state, e.g. CA
+          title: State
+        description: Place-of-performance state, e.g. CA
+      - name: start
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 'Action-date start, YYYY-MM-DD (default: 1 year ago)'
+          title: Start
+        description: 'Action-date start, YYYY-MM-DD (default: 1 year ago)'
+      - name: end
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 'Action-date end, YYYY-MM-DD (default: today)'
+          title: End
+        description: 'Action-date end, YYYY-MM-DD (default: today)'
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          description: Records to return
+          default: 20
+          title: Limit
+        description: Records to return
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: Page number
+          default: 1
+          title: Page
+        description: Page number
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+          description: amount, start, or end
+          default: amount
+          title: Sort
+        description: amount, start, or end
+      - name: order
+        in: query
+        required: false
+        schema:
+          type: string
+          description: asc or desc
+          default: desc
+          title: Order
+        description: asc or desc
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/grants:
+    get:
+      tags:
+      - government
+      summary: Federal grant opportunities (Grants.gov)
+      description: 'Federal grant funding opportunities from Grants.gov, normalized into flat JSON.
+
+        Each record carries the opportunity id and number, title, agency, status, the open
+
+        and close dates, the Assistance Listing (CFDA) numbers, and the grants.gov link.
+
+        Defaults to open opportunities (posted + forecasted). Completes the gov-funding
+
+        trio with /v1/opportunities (contracts) and /v1/awards (spending).'
+      operationId: grants_v1_grants_get
+      parameters:
+      - name: keyword
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Full-text keyword filter
+          title: Keyword
+        description: Full-text keyword filter
+      - name: status
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Pipe/comma list of forecasted, posted, closed, archived (default posted|forecasted)
+          title: Status
+        description: Pipe/comma list of forecasted, posted, closed, archived (default posted|forecasted)
+      - name: agency
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Agency code filter, e.g. HHS-OPHS
+          title: Agency
+        description: Agency code filter, e.g. HHS-OPHS
+      - name: category
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Funding category code, e.g. HL (health)
+          title: Category
+        description: Funding category code, e.g. HL (health)
+      - name: eligibility
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Eligibility code filter
+          title: Eligibility
+        description: Eligibility code filter
+      - name: aln
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Assistance Listing (CFDA) number, e.g. 93.217
+          title: Aln
+        description: Assistance Listing (CFDA) number, e.g. 93.217
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          description: Records to return
+          default: 20
+          title: Limit
+        description: Records to return
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Start record number
+          default: 0
+          title: Offset
+        description: Start record number
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/congress:
+    get:
+      tags:
+      - government
+      summary: Congressional stock trades (House STOCK Act)
+      description: 'Recent congressional stock trades, newest first, parsed from US House STOCK Act
+
+        periodic transaction reports. Each record carries the member, state/district, ticker,
+
+        buy or sell, the disclosed dollar range, the transaction and disclosure dates, and a link
+
+        to the House disclosure PDF. House-only for now; the Senate feed is coming.'
+      operationId: congress_feed_v1_congress_get
+      parameters:
+      - name: action
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Filter to 'buy' or 'sell'
+          title: Action
+        description: Filter to 'buy' or 'sell'
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          description: Trades to return
+          default: 40
+          title: Limit
+        description: Trades to return
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/congress/{ticker}:
+    get:
+      tags:
+      - government
+      summary: Congressional trades in one stock
+      description: 'Congressional stock trades in one ticker, newest first, from US House STOCK Act
+
+        periodic transaction reports. Same fields as the feed: member, buy/sell, dollar range,
+
+        dates, and the House disclosure PDF link. House-only for now.'
+      operationId: congress_ticker_v1_congress__ticker__get
+      parameters:
+      - name: ticker
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Stock ticker, e.g. NVDA
+          title: Ticker
+        description: Stock ticker, e.g. NVDA
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          description: Trades to return
+          default: 40
+          title: Limit
+        description: Trades to return
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError

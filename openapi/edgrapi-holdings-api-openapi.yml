@@ -1,0 +1,124 @@
+openapi: 3.2.0
+info:
+  title: Edgrapi — US Government Data Holdings API
+  description: Official US government data as clean JSON on one API key. SEC EDGAR filings (insider Form 4 trades, 8-K events, 13F fund holdings, 13D/13G activist stakes, financial statements and ratios), SAM.gov federal contract opportunities, USAspending awards, Grants.gov grant opportunities, and US House Congress stock trades. Hosted MCP server plus REST, with real-time webhooks when a watched company files. One key, one normalized schema.
+  contact:
+    name: Edgrapi
+    url: https://edgrapi.com/
+  license:
+    name: Proprietary
+  version: 1.0.0
+tags:
+- name: Holdings
+paths:
+  /v1/holdings/{identifier}:
+    get:
+      tags:
+      - Holdings
+      summary: 13F institutional holdings + quarter-over-quarter changes
+      description: 'A fund''s latest 13F portfolio, parsed from the SEC information table, ranked by
+
+        value, and diffed against the prior quarter so every position is labelled new,
+
+        added, reduced or unchanged — with the exits listed separately.
+
+
+        Positions are aggregated by CUSIP (funds split one holding across sub-managers, so
+
+        the raw table double-counts). Options carry a `put_call` flag: a PUT is a bearish
+
+        bet, not a long, and reporting it as a holding is the classic 13F mistake. Value is
+
+        whole dollars. Each position also carries a best-effort `ticker` resolved from its
+
+        CUSIP; the issuer name and CUSIP stay authoritative, and `ticker` is null when the
+
+        CUSIP has no US equity listing (a bond, a foreign issue) or isn''t resolved yet.
+
+
+        Identify the fund by a known name (berkshire, burry, ackman, bridgewater, citadel,
+
+        …), a raw CIK, or a ticker when the manager is itself public (BRK-B). 13F is a
+
+        quarterly snapshot filed up to 45 days after quarter-end — it is a lagged position
+
+        report, not a live trade feed.'
+      operationId: institutional_holdings_v1_holdings__identifier__get
+      parameters:
+      - name: identifier
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Fund name (e.g. 'berkshire', 'burry', 'pershing-square'), a CIK, or a ticker whose company is the filer (e.g. BRK-B)
+          title: Identifier
+        description: Fund name (e.g. 'berkshire', 'burry', 'pershing-square'), a CIK, or a ticker whose company is the filer (e.g. BRK-B)
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 500
+          minimum: 1
+          description: Max positions returned
+          default: 50
+          title: Limit
+        description: Max positions returned
+      - name: changes
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: Diff against the prior quarter (new/added/reduced/exited)
+          default: true
+          title: Changes
+        description: Diff against the prior quarter (new/added/reduced/exited)
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError

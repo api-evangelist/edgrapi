@@ -1,0 +1,8 @@
+generated: "2026-10-16"
+method: probed
+source: https://edgrapi.com/.well-known/mcp/server-card.json
+deployment:
+  mode: remote
+  endpoint: https://api.edgrapi.com/mcp
+  auth: api-key
+  verified: probed

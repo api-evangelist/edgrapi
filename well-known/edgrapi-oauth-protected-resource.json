@@ -1,0 +1,1 @@
+{"resource":"https://edgrapi.com/mcp","authorization_servers":["https://edgrapi.com"],"scopes_supported":["edgrapi:read"],"bearer_methods_supported":["header"],"resource_documentation":"https://edgrapi.com/docs"}

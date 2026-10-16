@@ -1,0 +1,45 @@
+openapi: 3.2.0
+info:
+  title: Edgrapi — US Government Data Meta API
+  description: Official US government data as clean JSON on one API key. SEC EDGAR filings (insider Form 4 trades, 8-K events, 13F fund holdings, 13D/13G activist stakes, financial statements and ratios), SAM.gov federal contract opportunities, USAspending awards, Grants.gov grant opportunities, and US House Congress stock trades. Hosted MCP server plus REST, with real-time webhooks when a watched company files. One key, one normalized schema.
+  contact:
+    name: Edgrapi
+    url: https://edgrapi.com/
+  license:
+    name: Proprietary
+  version: 1.0.0
+tags:
+- name: Meta
+  description: Health & discovery.
+paths:
+  /v1/keys:
+    post:
+      tags:
+      - Meta
+      summary: How to get an API key
+      description: 'Anonymous key minting is disabled. Each anonymous mint created a fresh 50-credit account,
+
+        so the free tier was bypassable by key rotation (a scripted client could get unlimited free
+
+        access). Getting a key now requires a free account — email, no card — which keeps one wallet
+
+        per person and preserves the paywall. Existing keys keep working; the dashboard mints more.'
+      operationId: create_free_key_v1_keys_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /health:
+    get:
+      tags:
+      - Meta
+      summary: Health
+      operationId: health_health_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}

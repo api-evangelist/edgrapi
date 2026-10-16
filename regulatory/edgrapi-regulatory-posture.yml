@@ -1,0 +1,18 @@
+generated: '2026-10-16'
+method: probed
+source: https://edgrapi.com
+signals:
+  data_subject_request:
+    evidence:
+      - source: https://edgrapi.com/privacy
+        http_status: 200
+        fetched: /tmp/privacy.html
+        quote: "Email support@edgrapi.com to export or delete your account."
+    note: Provides a mechanism for data export and deletion upon user request.
+  data_retention:
+    evidence:
+      - source: https://edgrapi.com/privacy
+        http_status: 200
+        fetched: /tmp/privacy.html
+        quote: "What we collect and why. Short version: as little as possible."
+    note: States a minimal data collection policy but does not specify retention periods.

@@ -1,0 +1,193 @@
+openapi: 3.2.0
+info:
+  title: Edgrapi — US Government Data Insider API
+  description: Official US government data as clean JSON on one API key. SEC EDGAR filings (insider Form 4 trades, 8-K events, 13F fund holdings, 13D/13G activist stakes, financial statements and ratios), SAM.gov federal contract opportunities, USAspending awards, Grants.gov grant opportunities, and US House Congress stock trades. Hosted MCP server plus REST, with real-time webhooks when a watched company files. One key, one normalized schema.
+  contact:
+    name: Edgrapi
+    url: https://edgrapi.com/
+  license:
+    name: Proprietary
+  version: 1.0.0
+tags:
+- name: insider
+  description: Parsed Form 4 insider trades and the market-wide buy feed.
+paths:
+  /v1/insider/{ticker}:
+    get:
+      tags:
+      - insider
+      summary: Insider trades (Form 4) + market-wide buys
+      description: 'Parsed insider transactions from SEC Form 4 (and 3/5): who traded, their
+
+        role, the transaction code, share count, price, and whether the trade was an
+
+        open-market decision or automatic compensation. Code P (open-market purchase)
+
+        is the only signal where the insider spent their own money; sales tagged
+
+        plan_10b5_1 were pre-scheduled and carry little signal.
+
+
+        Use ticker=''latest'' for the market-wide feed of the biggest open-market insider
+
+        BUYS, or ticker=''clusters'' for companies where several insiders bought at once
+
+        (the cluster-buy signal), newest and largest first.'
+      operationId: insider_trades_v1_insider__ticker__get
+      parameters:
+      - name: ticker
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Ticker, 'latest' for market-wide buys, or 'clusters' for cluster buys
+          title: Ticker
+        description: Ticker, 'latest' for market-wide buys, or 'clusters' for cluster buys
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          description: Recent filings to return; higher = slower on a cold ticker
+          default: 6
+          title: Limit
+        description: Recent filings to return; higher = slower on a cold ticker
+      - name: form
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 'Ownership form: 3, 4, 5, or 144 (notice of proposed sale)'
+          default: '4'
+          title: Form
+        description: 'Ownership form: 3, 4, 5, or 144 (notice of proposed sale)'
+      - name: min_value
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: 'For ''latest''/''clusters'': minimum buy value (USD)'
+          default: 50000
+          title: Min Value
+        description: 'For ''latest''/''clusters'': minimum buy value (USD)'
+      - name: days
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 90
+          minimum: 1
+          description: 'For ''clusters'': lookback window in days'
+          default: 15
+          title: Days
+        description: 'For ''clusters'': lookback window in days'
+      - name: min_insiders
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 10
+          minimum: 2
+          description: 'For ''clusters'': min distinct insiders'
+          default: 3
+          title: Min Insiders
+        description: 'For ''clusters'': min distinct insiders'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/form144/{ticker}:
+    get:
+      tags:
+      - insider
+      summary: Form 144 — notices of proposed insider sales
+      description: 'Form 144 notices — an insider''s declared INTENT to sell restricted or control
+
+        stock, filed before the sale executes and shows up on a Form 4. A leading
+
+        intent-to-sell signal, parsed: the seller, their relationship to the issuer, and
+
+        each security block (shares to be sold, aggregate market value, approximate sale
+
+        date, exchange, broker), with totals across the notice.'
+      operationId: form144_v1_form144__ticker__get
+      parameters:
+      - name: ticker
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Stock ticker, e.g. AAPL
+          title: Ticker
+        description: Stock ticker, e.g. AAPL
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          description: Recent notices to return; higher = slower on a cold ticker (one SEC fetch per notice)
+          default: 8
+          title: Limit
+        description: Recent notices to return; higher = slower on a cold ticker (one SEC fetch per notice)
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError

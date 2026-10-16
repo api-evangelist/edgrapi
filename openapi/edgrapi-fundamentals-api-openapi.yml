@@ -1,0 +1,209 @@
+openapi: 3.2.0
+info:
+  title: Edgrapi — US Government Data Fundamentals API
+  description: Official US government data as clean JSON on one API key. SEC EDGAR filings (insider Form 4 trades, 8-K events, 13F fund holdings, 13D/13G activist stakes, financial statements and ratios), SAM.gov federal contract opportunities, USAspending awards, Grants.gov grant opportunities, and US House Congress stock trades. Hosted MCP server plus REST, with real-time webhooks when a watched company files. One key, one normalized schema.
+  contact:
+    name: Edgrapi
+    url: https://edgrapi.com/
+  license:
+    name: Proprietary
+  version: 1.0.0
+tags:
+- name: Fundamentals
+  description: Financial statements & ratios.
+paths:
+  /v1/company/{ticker}:
+    get:
+      tags:
+      - Fundamentals
+      summary: Company profile and CIK lookup
+      description: 'Company profile from SEC EDGAR: name, CIK, SIC industry, exchanges, fiscal
+
+        year end. The lookup you make before any other call.'
+      operationId: company_v1_company__ticker__get
+      parameters:
+      - name: ticker
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Stock ticker, e.g. AAPL
+          title: Ticker
+        description: Stock ticker, e.g. AAPL
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/fundamentals/{ticker}:
+    get:
+      tags:
+      - Fundamentals
+      summary: Financial statements (income, balance sheet, cash flow)
+      description: 'Income statement, balance sheet, and cash flow from SEC filings as clean
+
+        JSON, annual or quarterly. Same field names for every company, so you stop
+
+        writing per-ticker special cases.'
+      operationId: fundamentals_v1_fundamentals__ticker__get
+      parameters:
+      - name: ticker
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Stock ticker, e.g. AAPL
+          title: Ticker
+        description: Stock ticker, e.g. AAPL
+      - name: period
+        in: query
+        required: false
+        schema:
+          type: string
+          pattern: ^(annual|quarterly)$
+          default: annual
+          title: Period
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 20
+          minimum: 1
+          default: 5
+          title: Limit
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/ratios/{ticker}:
+    get:
+      tags:
+      - Fundamentals
+      summary: 14 financial ratios + per-share figures
+      description: '14 named ratios worked out from a company''s SEC statements: margins, ROE,
+
+        ROA, current ratio, debt-to-equity, and revenue growth. Also returns the
+
+        per-share figures (eps_diluted, book_value_per_share, shares_outstanding) so
+
+        you can compute price ratios yourself: P/E = your price / eps_diluted,
+
+        P/B = your price / book_value_per_share.'
+      operationId: ratios_v1_ratios__ticker__get
+      parameters:
+      - name: ticker
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Stock ticker, e.g. AAPL
+          title: Ticker
+        description: Stock ticker, e.g. AAPL
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/shares/{ticker}:
+    get:
+      tags:
+      - Fundamentals
+      summary: Shares outstanding & public float
+      description: 'Common shares outstanding and public float from the XBRL cover-page tags.
+
+        Shares outstanding updates every 10-Q/10-K; public float is reported on the 10-K
+
+        cover, so it refreshes about yearly. The two numbers you need for market-cap and
+
+        free-float math (multiply shares by a price from your own feed).'
+      operationId: shares_v1_shares__ticker__get
+      parameters:
+      - name: ticker
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Stock ticker or CIK, e.g. AAPL
+          title: Ticker
+        description: Stock ticker or CIK, e.g. AAPL
+      - name: history
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: Include the full reported history, not just the latest
+          default: false
+          title: History
+        description: Include the full reported history, not just the latest
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError

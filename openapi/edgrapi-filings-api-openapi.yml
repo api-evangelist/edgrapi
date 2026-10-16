@@ -1,0 +1,281 @@
+openapi: 3.2.0
+info:
+  title: Edgrapi — US Government Data Filings API
+  description: Official US government data as clean JSON on one API key. SEC EDGAR filings (insider Form 4 trades, 8-K events, 13F fund holdings, 13D/13G activist stakes, financial statements and ratios), SAM.gov federal contract opportunities, USAspending awards, Grants.gov grant opportunities, and US House Congress stock trades. Hosted MCP server plus REST, with real-time webhooks when a watched company files. One key, one normalized schema.
+  contact:
+    name: Edgrapi
+    url: https://edgrapi.com/
+  license:
+    name: Proprietary
+  version: 1.0.0
+tags:
+- name: filings
+  description: Filing history & 10-K/10-Q sections.
+paths:
+  /v1/filings/{ticker}:
+    get:
+      tags:
+      - filings
+      summary: All filings by form (10-K, 10-Q, 8-K, Form 4)
+      description: 'Every filing a company has made, each linked to the document on SEC.gov.
+
+        Filter by form to pull just the 10-Ks, the 8-Ks, or the Form 4s.'
+      operationId: filings_v1_filings__ticker__get
+      parameters:
+      - name: ticker
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Stock ticker, e.g. AAPL
+          title: Ticker
+        description: Stock ticker, e.g. AAPL
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          default: 20
+          title: Limit
+      - name: form
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Filter by form, e.g. 10-K, 8-K, or 4
+          title: Form
+        description: Filter by form, e.g. 10-K, 8-K, or 4
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/sections/{ticker}:
+    get:
+      tags:
+      - filings
+      summary: 10-K/10-Q narrative sections (Risk Factors, MD&A)
+      description: 'Narrative sections from the latest 10-K/10-Q as clean text (Risk Factors,
+
+        MD&A, Business, etc.) — built for LLM/RAG equity research.'
+      operationId: filing_sections_v1_sections__ticker__get
+      parameters:
+      - name: ticker
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Stock ticker, e.g. AAPL
+          title: Ticker
+        description: Stock ticker, e.g. AAPL
+      - name: form
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 'Filing type: 10-K or 10-Q'
+          default: 10-K
+          title: Form
+        description: 'Filing type: 10-K or 10-Q'
+      - name: item
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Section to fetch, e.g. 1A (Risk Factors) or 7 (MD&A) for a 10-K. For a 10-Q, item numbers repeat across Part I (financial) and Part II (other info), so prefix the part, e.g. I.2 (MD&A) or II.1A (Risk Factors); a bare number defaults to Part I. Omit to list sections.
+          title: Item
+        description: Section to fetch, e.g. 1A (Risk Factors) or 7 (MD&A) for a 10-K. For a 10-Q, item numbers repeat across Part I (financial) and Part II (other info), so prefix the part, e.g. I.2 (MD&A) or II.1A (Risk Factors); a bare number defaults to Part I. Omit to list sections.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/download:
+    get:
+      tags:
+      - filings
+      summary: Download a filing document by accession
+      description: 'Fetch a filing''s document straight from the EDGAR archive, through Edgrapi''s
+
+        politeness gate, circuit breaker and week-long cache, so you don''t hit SEC.gov
+
+        directly or manage the User-Agent and rate limits. Omit `file` to get the primary
+
+        document (the 10-K, 8-K, Form 4, etc.); pass `file` to pull a specific exhibit.
+
+        Text documents (HTML, XML, TXT) only; binary exhibits keep their SEC.gov URL in
+
+        /v1/filings.'
+      operationId: download_filing_v1_download_get
+      parameters:
+      - name: accession
+        in: query
+        required: true
+        schema:
+          type: string
+          description: Accession number, e.g. 0000320193-24-000123
+          title: Accession
+        description: Accession number, e.g. 0000320193-24-000123
+      - name: file
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Document filename within the filing; omit for the primary document
+          title: File
+        description: Document filename within the filing; omit for the primary document
+      - name: cik
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Filer CIK; omit to derive it from the accession
+          title: Cik
+        description: Filer CIK; omit to derive it from the accession
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/formd/latest:
+    get:
+      tags:
+      - filings
+      summary: Market-wide recent Form D private placements
+      description: 'Recent Form D filings across all issuers — the live feed of new private
+
+        placements (Reg D raises). Each notice is parsed: issuer, jurisdiction, industry,
+
+        the amount offered and sold, the exemption claimed, and the related persons. A
+
+        funding signal that lands the day the raise is disclosed.'
+      operationId: formd_latest_v1_formd_latest_get
+      parameters:
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          description: Recent Form D notices to return
+          default: 20
+          title: Limit
+        description: Recent Form D notices to return
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/formd/{ident}:
+    get:
+      tags:
+      - filings
+      summary: Form D private placements by issuer
+      description: 'Parsed Form D private-placement notices for one issuer, newest first. Form D
+
+        issuers are usually private companies, so identify them by CIK; a ticker also works
+
+        when the issuer is public. Returns issuer, jurisdiction, industry, amount offered
+
+        and sold, the Reg D exemption, related persons, and the date of first sale.'
+      operationId: formd_issuer_v1_formd__ident__get
+      parameters:
+      - name: ident
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Issuer CIK, or a ticker if the issuer is public
+          title: Ident
+        description: Issuer CIK, or a ticker if the issuer is public
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 50
+          minimum: 1
+          description: Recent notices to return
+          default: 10
+          title: Limit
+        description: Recent notices to return
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError

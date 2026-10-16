@@ -1,23 +1,229 @@
 aid: edgrapi
+
 name: Paper and Beyond
-description: 'Paper and Beyond is a company surfaced via the API Evangelist harvest backlog (source: g2-catalog)
-  and added to the network as a stub for full-pipeline profiling.'
+
+image: https://edgrapi.com/static/og-edgrapi.png
+
+description: Paper and Beyond provides a US Government Data API for developers and AI agents, aggregating data from SAM.gov contracts, USAspending
+  awards, Grants.gov, Congress trades, and SEC EDGAR into a single JSON schema. The service offers a hosted MCP server with a free tier, no credit
+  card required, and supports REST access. It targets AI agents and developers needing comprehensive federal data via a unified API.
+
 url: https://raw.githubusercontent.com/api-evangelist/edgrapi/refs/heads/main/apis.yml
+
 x-type: company
+
 x-source: harvest:g2-catalog
-x-tier: stub
-x-tier-reason: harvest
+
+x-tier: profiled
+x-tier-reason: enrichment pass 2026-10-16 (modular-v1; was harvest)
+
 specificationVersion: '0.20'
+
 created: '2026-10-16'
+
 modified: '2026-10-16'
+
 tags:
 - Company
-apis: []
+- Data
+- Government
+- API
+- AI
+
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+
 common:
+- type: AgenticAccess
+  url: agentic-access/edgrapi-agentic-access.yml
+- type: RateLimits
+  url: rate-limits/edgrapi-rate-limits.yml
+- type: Plans
+  url: plans/edgrapi-plans-pricing.yml
+- type: Spectral
+  url: rules/edgrapi-rules.yml
+- type: JSONLD
+  url: json-ld/edgrapi-context.jsonld
+- type: Vocabulary
+  url: vocabulary/edgrapi-vocabulary.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: DataModel
+  url: data-model/edgrapi-data-model.yml
+- type: Security
+  url: https://edgrapi.com/contact
+- type: Authentication
+  url: authentication/edgrapi-authentication.yml
+- type: ErrorCatalog
+  url: errors/edgrapi-problem-types.yml
+- type: Conformance
+  url: conformance/edgrapi-conformance.yml
+- type: LLMsTxt
+  url: llms/edgrapi-llms.txt
+- type: ToolCrosswalk
+  url: mcp/edgrapi-tool-crosswalk.yml
+- type: MCPServer
+  url: mcp/edgrapi-mcp.yml
+- type: SecurityTxt
+  url: well-known/edgrapi-security.txt
+- type: SecurityTxt
+  url: well-known/edgrapi-api-security.txt
+- type: WellKnown
+  url: well-known/edgrapi-well-known.yml
+- type: Hosts
+  url: hosts/edgrapi-hosts.yml
+- type: Vendors
+  url: vendors/edgrapi-vendors.yml
+- type: SDKs
+  url: packages/edgrapi-packages.yml
+- type: Packages
+  url: packages/edgrapi-packages.yml
+- type: StatusPage
+  url: https://edgrapi.com/status
+- type: DeveloperPortal
+  url: https://api.edgrapi.com</code
+- type: VulnerabilityDisclosure
+  url: security/edgrapi-vulnerability-disclosure.yml
+- type: DomainSecurity
+  url: security/edgrapi-domain-security.yml
 - type: Website
   url: https://edgrapi.com/
+- type: Documentation
+  url: https://edgrapi.com/docs
+- type: APIReference
+  url: https://edgrapi.com/swagger
+- type: GettingStarted
+  url: https://edgrapi.com/docs
+- type: Support
+  url: https://edgrapi.com/contact
+- type: Blog
+  url: https://edgrapi.com/blog
+- type: Pricing
+  url: https://edgrapi.com/pricing
+- type: SignUp
+  url: https://edgrapi.com/app
+- type: TermsOfService
+  url: https://edgrapi.com/terms
+- type: PrivacyPolicy
+  url: https://edgrapi.com/privacy
+- type: Postman
+  url: https://www.postman.com/edgrapi/workspace
+
+apis:
+- aid: edgrapi:edgrapi-activist-api
+  name: Paper and Beyond Activist API
+  description: The activist API from Paper and Beyond — 1 operation(s) for activist.
+  humanURL: https://edgrapi.com/docs
+  tags:
+  - activist
+  properties:
+  - type: OpenAPI
+    url: openapi/edgrapi-activist-api-openapi.yml
+- aid: edgrapi:edgrapi-events-api
+  name: Paper and Beyond Events API
+  description: 8-K material events with parsed item codes.
+  humanURL: https://edgrapi.com/docs
+  tags:
+  - events
+  properties:
+  - type: OpenAPI
+    url: openapi/edgrapi-events-api-openapi.yml
+- aid: edgrapi:edgrapi-filings-api
+  name: Paper and Beyond Filings API
+  description: Filing history & 10-K/10-Q sections.
+  humanURL: https://edgrapi.com/docs
+  tags:
+  - filings
+  properties:
+  - type: OpenAPI
+    url: openapi/edgrapi-filings-api-openapi.yml
+- aid: edgrapi:edgrapi-fundamentals-api
+  name: Paper and Beyond Fundamentals API
+  description: Financial statements & ratios.
+  humanURL: https://edgrapi.com/docs
+  tags:
+  - fundamentals
+  properties:
+  - type: OpenAPI
+    url: openapi/edgrapi-fundamentals-api-openapi.yml
+- aid: edgrapi:edgrapi-government-api
+  name: Paper and Beyond Government API
+  description: 'US government data beyond the SEC: federal contract opportunities and more.'
+  humanURL: https://edgrapi.com/docs
+  tags:
+  - government
+  properties:
+  - type: OpenAPI
+    url: openapi/edgrapi-government-api-openapi.yml
+- aid: edgrapi:edgrapi-holdings-api
+  name: Paper and Beyond Holdings API
+  description: The holdings API from Paper and Beyond — 1 operation(s) for holdings.
+  humanURL: https://edgrapi.com/docs
+  tags:
+  - holdings
+  properties:
+  - type: OpenAPI
+    url: openapi/edgrapi-holdings-api-openapi.yml
+- aid: edgrapi:edgrapi-insider-api
+  name: Paper and Beyond Insider API
+  description: Parsed Form 4 insider trades and the market-wide buy feed.
+  humanURL: https://edgrapi.com/docs
+  tags:
+  - insider
+  properties:
+  - type: OpenAPI
+    url: openapi/edgrapi-insider-api-openapi.yml
+- aid: edgrapi:edgrapi-meta-api
+  name: Paper and Beyond Meta API
+  description: Health & discovery.
+  humanURL: https://edgrapi.com/docs
+  tags:
+  - meta
+  properties:
+  - type: OpenAPI
+    url: openapi/edgrapi-meta-api-openapi.yml
+- aid: edgrapi:edgrapi-reference-api
+  name: Paper and Beyond Reference API
+  description: The reference API from Paper and Beyond — 2 operation(s) for reference.
+  humanURL: https://edgrapi.com/docs
+  tags:
+  - reference
+  properties:
+  - type: OpenAPI
+    url: openapi/edgrapi-reference-api-openapi.yml
+- aid: edgrapi:edgrapi-search-api
+  name: Paper and Beyond Search API
+  description: The search API from Paper and Beyond — 1 operation(s) for search.
+  humanURL: https://edgrapi.com/docs
+  tags:
+  - search
+  properties:
+  - type: OpenAPI
+    url: openapi/edgrapi-search-api-openapi.yml
+- aid: edgrapi:edgrapi-webhooks-api
+  name: Paper and Beyond Webhooks API
+  description: Get a signed POST the moment a watched company files.
+  humanURL: https://edgrapi.com/docs
+  tags:
+  - webhooks
+  properties:
+  - type: OpenAPI
+    url: openapi/edgrapi-webhooks-api-openapi.yml
+- aid: edgrapi:edgrapi-xbrl-api
+  name: Paper and Beyond Xbrl API
+  description: The xbrl API from Paper and Beyond — 2 operation(s) for xbrl.
+  humanURL: https://edgrapi.com/docs
+  tags:
+  - xbrl
+  properties:
+  - type: OpenAPI
+    url: openapi/edgrapi-xbrl-api-openapi.yml
+x-enrichment:
+  date: '2026-10-16'
+  status: enriched
+  artifacts_added: 34
+  pass: modular-v1
+  engine: identity=local,contract=local,surfaces=local,docs=local,regulatory=local

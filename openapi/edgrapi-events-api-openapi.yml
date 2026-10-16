@@ -1,0 +1,201 @@
+openapi: 3.2.0
+info:
+  title: Edgrapi — US Government Data Events API
+  description: Official US government data as clean JSON on one API key. SEC EDGAR filings (insider Form 4 trades, 8-K events, 13F fund holdings, 13D/13G activist stakes, financial statements and ratios), SAM.gov federal contract opportunities, USAspending awards, Grants.gov grant opportunities, and US House Congress stock trades. Hosted MCP server plus REST, with real-time webhooks when a watched company files. One key, one normalized schema.
+  contact:
+    name: Edgrapi
+    url: https://edgrapi.com/
+  license:
+    name: Proprietary
+  version: 1.0.0
+tags:
+- name: Events
+  description: 8-K material events with parsed item codes.
+paths:
+  /v1/events/restatements:
+    get:
+      tags:
+      - Events
+      summary: Market-wide 8-K restatements (item 4.02)
+      description: 'Market-wide feed of recent 8-K item 4.02 filings — non-reliance on previously
+
+        issued financial statements, i.e. a company announcing its past financials can no
+
+        longer be trusted. One of the strongest red-flag signals in the filings.'
+      operationId: events_restatements_v1_events_restatements_get
+      parameters:
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          default: 50
+          title: Limit
+      - name: days
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 365
+          minimum: 1
+          description: Lookback window for the scan
+          default: 45
+          title: Days
+        description: Lookback window for the scan
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/events/auditor-changes:
+    get:
+      tags:
+      - Events
+      summary: Market-wide 8-K auditor changes (item 4.01)
+      description: 'Market-wide feed of recent 8-K item 4.01 filings — changes in the registrant''s
+
+        certifying accountant (an auditor switch). A resignation or dismissal of the auditor
+
+        is a governance red flag worth watching.'
+      operationId: events_auditor_changes_v1_events_auditor_changes_get
+      parameters:
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          default: 50
+          title: Limit
+      - name: days
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 365
+          minimum: 1
+          description: Lookback window for the scan
+          default: 45
+          title: Days
+        description: Lookback window for the scan
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/events/{ticker}:
+    get:
+      tags:
+      - Events
+      summary: 8-K material events
+      description: '8-K material events for a company as a typed stream: each event carries its
+
+        item codes with human labels (2.02 earnings, 5.02 exec change, 1.05 cyber
+
+        incident...), a `notable` flag for the market-moving ones, and a link to the
+
+        filing. Set notable=true to skip routine 8-Ks, or item=4.02 to pull just one
+
+        event type (e.g. every restatement this company has filed).'
+      operationId: material_events_v1_events__ticker__get
+      parameters:
+      - name: ticker
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Stock ticker, e.g. AAPL
+          title: Ticker
+        description: Stock ticker, e.g. AAPL
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          default: 20
+          title: Limit
+      - name: notable
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: Only earnings, M&A, exec changes, breaches, etc.
+          default: false
+          title: Notable
+        description: Only earnings, M&A, exec changes, breaches, etc.
+      - name: item
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Filter to a specific 8-K item code, or comma-separated codes, e.g. 4.02 (restatement) or 5.02,2.02
+          title: Item
+        description: Filter to a specific 8-K item code, or comma-separated codes, e.g. 4.02 (restatement) or 5.02,2.02
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError

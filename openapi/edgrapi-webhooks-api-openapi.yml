@@ -1,0 +1,210 @@
+openapi: 3.2.0
+info:
+  title: Edgrapi — US Government Data Webhooks API
+  description: Official US government data as clean JSON on one API key. SEC EDGAR filings (insider Form 4 trades, 8-K events, 13F fund holdings, 13D/13G activist stakes, financial statements and ratios), SAM.gov federal contract opportunities, USAspending awards, Grants.gov grant opportunities, and US House Congress stock trades. Hosted MCP server plus REST, with real-time webhooks when a watched company files. One key, one normalized schema.
+  contact:
+    name: Edgrapi
+    url: https://edgrapi.com/
+  license:
+    name: Proprietary
+  version: 1.0.0
+tags:
+- name: Webhooks
+  description: Get a signed POST the moment a watched company files.
+paths:
+  /v1/webhooks:
+    get:
+      tags:
+      - Webhooks
+      summary: List your webhooks
+      description: List your webhooks (secrets are not returned).
+      operationId: webhook_list_v1_webhooks_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+    post:
+      tags:
+      - Webhooks
+      summary: Create a filing webhook
+      description: 'Register a webhook. Body: {"url": "https://...", "tickers": ["AAPL","MSFT"],
+
+        "events": ["insider","8-k"]}. You get a signing secret back, shown once.'
+      operationId: webhook_create_v1_webhooks_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                url:
+                  type: string
+                  format: uri
+                  description: https:// endpoint that receives the signed POSTs
+                tickers:
+                  items:
+                    type: string
+                  type: array
+                  description: US tickers to watch (max 50)
+                events:
+                  items:
+                    type: string
+                    enum:
+                    - insider
+                    - 8-k
+                    - activist
+                  type: array
+                  description: 'Event types to fire on (default: insider, 8-k)'
+              type: object
+              required:
+              - url
+              - tickers
+            example:
+              url: https://example.com/edgrapi-hook
+              tickers:
+              - AAPL
+              - MSFT
+              events:
+              - insider
+              - 8-k
+              - activist
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /v1/webhooks/{wid}:
+    delete:
+      tags:
+      - Webhooks
+      summary: Delete a webhook
+      description: 'Permanently delete a webhook you own. Returns 404 if no webhook with that id exists
+
+        for your account (rather than falsely reporting success for an unknown id).'
+      operationId: webhook_delete_v1_webhooks__wid__delete
+      parameters:
+      - name: wid
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Wid
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/webhooks/{wid}/test:
+    post:
+      tags:
+      - Webhooks
+      summary: Send a signed test delivery
+      description: 'Send a signed test payload to a webhook so you can verify your endpoint
+
+        and signature check before a real filing arrives.'
+      operationId: webhook_test_v1_webhooks__wid__test_post
+      parameters:
+      - name: wid
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Wid
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/webhooks/{wid}/deliveries:
+    get:
+      tags:
+      - Webhooks
+      summary: Recent delivery attempts for a webhook
+      description: 'The recent delivery attempts for a webhook you own: the event, ticker, accession, whether the
+
+        POST succeeded, the HTTP status, and any error. The audit trail for debugging your endpoint.'
+      operationId: webhook_deliveries_v1_webhooks__wid__deliveries_get
+      parameters:
+      - name: wid
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Wid
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 200
+          minimum: 1
+          description: Attempts to return, newest first
+          default: 50
+          title: Limit
+        description: Attempts to return, newest first
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError

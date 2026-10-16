@@ -1,0 +1,138 @@
+openapi: 3.2.0
+info:
+  title: Edgrapi — US Government Data Reference API
+  description: Official US government data as clean JSON on one API key. SEC EDGAR filings (insider Form 4 trades, 8-K events, 13F fund holdings, 13D/13G activist stakes, financial statements and ratios), SAM.gov federal contract opportunities, USAspending awards, Grants.gov grant opportunities, and US House Congress stock trades. Hosted MCP server plus REST, with real-time webhooks when a watched company files. One key, one normalized schema.
+  contact:
+    name: Edgrapi
+    url: https://edgrapi.com/
+  license:
+    name: Proprietary
+  version: 1.0.0
+tags:
+- name: Reference
+paths:
+  /v1/resolve:
+    get:
+      tags:
+      - Reference
+      summary: Resolve a ticker, CIK, or CUSIP to a company
+      description: 'Map any one of ticker / CIK / CUSIP to the canonical SEC entity: legal name,
+
+        CIK, ticker(s), exchange, SIC industry and sector, state of incorporation, and
+
+        business location. The foundational lookup the other endpoints lean on. CUSIP
+
+        resolution goes through the same crosswalk 13F holdings use, so a CUSIP with no
+
+        US-listed equity (bonds, delisted, foreign) returns 404.'
+      operationId: resolve_entity_v1_resolve_get
+      parameters:
+      - name: ticker
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Stock ticker, e.g. AAPL
+          title: Ticker
+        description: Stock ticker, e.g. AAPL
+      - name: cik
+        in: query
+        required: false
+        schema:
+          type: string
+          description: SEC CIK, e.g. 320193 (zero-padding optional)
+          title: Cik
+        description: SEC CIK, e.g. 320193 (zero-padding optional)
+      - name: cusip
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 9-character CUSIP, e.g. 037833100
+          title: Cusip
+        description: 9-character CUSIP, e.g. 037833100
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/subsidiaries/{ident}:
+    get:
+      tags:
+      - Reference
+      summary: Subsidiaries from 10-K Exhibit 21
+      description: 'The company''s subsidiaries and their jurisdictions of incorporation, parsed from
+
+        Exhibit 21 of its latest 10-K. Exhibit 21 is an HTML exhibit whose layout varies by
+
+        filer, so this is a best-effort table parse; the list is empty (free) when a filer
+
+        files no Exhibit 21, which is common for companies claiming the significant-subsidiary
+
+        exemption.'
+      operationId: company_subsidiaries_v1_subsidiaries__ident__get
+      parameters:
+      - name: ident
+        in: path
+        required: true
+        schema:
+          type: string
+          description: Stock ticker or CIK, e.g. AAPL
+          title: Ident
+        description: Stock ticker or CIK, e.g. AAPL
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError

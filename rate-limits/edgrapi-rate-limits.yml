@@ -1,0 +1,17 @@
+generated: '2026-10-16'
+method: searched
+generator: extract-docs-artifacts.py (local)
+source: https://edgrapi.com/docs/rate-limits
+sources:
+- https://edgrapi.com/docs/rate-limits
+name: Paper and Beyond rate limits
+limits:
+- name: default
+  limit_text: 'X-RateLimit-Limit: 100'
+  max: 100
+headers:
+- X-RateLimit-Limit
+- X-RateLimit-Remaining
+- X-RateLimit-Reset
+exhaustion_status: 429
+docs: https://edgrapi.com/docs/rate-limits

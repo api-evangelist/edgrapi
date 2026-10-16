@@ -1,0 +1,126 @@
+openapi: 3.2.0
+info:
+  title: Edgrapi — US Government Data Activist API
+  description: Official US government data as clean JSON on one API key. SEC EDGAR filings (insider Form 4 trades, 8-K events, 13F fund holdings, 13D/13G activist stakes, financial statements and ratios), SAM.gov federal contract opportunities, USAspending awards, Grants.gov grant opportunities, and US House Congress stock trades. Hosted MCP server plus REST, with real-time webhooks when a watched company files. One key, one normalized schema.
+  contact:
+    name: Edgrapi
+    url: https://edgrapi.com/
+  license:
+    name: Proprietary
+  version: 1.0.0
+tags:
+- name: activist
+paths:
+  /v1/activist/{identifier}:
+    get:
+      tags:
+      - activist
+      summary: Schedule 13D/13G — >5% stakes & activist filings
+      description: 'Schedule 13D and 13G filings — the disclosure anyone crossing 5% of a company''s
+
+        voting stock must make. A 13D signals possible activist intent (board pushes, sales,
+
+        strategy); a 13G is a passive large holder. The `/A` suffix is an amendment (stake
+
+        raised, trimmed, or intent changed). Each record carries the issuer, CUSIP, the
+
+        reporting person(s), and the exact percent of class, parsed from the SEC''s structured
+
+        13D/G XML.
+
+
+        Use identifier=''latest'' for the real-time market-wide feed of new >5% stakes (the
+
+        activist radar), or a ticker to list the 13D/13G filings indexed on that company. The
+
+        per-company view reads an accumulating store, so it deepens as the feed runs — it is a
+
+        rolling recent window, not the full historical record.'
+      operationId: activist_stakes_v1_activist__identifier__get
+      parameters:
+      - name: identifier
+        in: path
+        required: true
+        schema:
+          type: string
+          description: '''latest'' for the market-wide 13D/13G feed, or a ticker to list stakes indexed on that company'
+          title: Identifier
+        description: '''latest'' for the market-wide 13D/13G feed, or a ticker to list stakes indexed on that company'
+      - name: activist_only
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: 'For ''latest'': keep only 13D (activist-intent) filings'
+          default: false
+          title: Activist Only
+        description: 'For ''latest'': keep only 13D (activist-intent) filings'
+      - name: min_percent
+        in: query
+        required: false
+        schema:
+          type: number
+          maximum: 100
+          minimum: 0
+          description: 'For ''latest'': minimum percent of class'
+          default: 0
+          title: Min Percent
+        description: 'For ''latest'': minimum percent of class'
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          default: 40
+          title: Limit
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
