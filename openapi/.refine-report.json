@@ -1,7 +1,7 @@
 {
   "provider": "edgrapi",
   "sources": [
-    "edgrapi-openapi.json"
+    "_original/edgrapi-openapi.json"
   ],
   "outputs": [
     "edgrapi-activist-api-openapi.yml",
@@ -17,19 +17,31 @@
     "edgrapi-webhooks-api-openapi.yml",
     "edgrapi-xbrl-api-openapi.yml"
   ],
-  "archived": [
-    "archived openapi/edgrapi-openapi.json"
-  ],
+  "archived": [],
   "errors": [],
   "warnings": [],
   "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
     "edgrapi-openapi.json: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
     "edgrapi-openapi.json: declared missing tag: activist",
     "edgrapi-openapi.json: declared missing tag: holdings",
     "edgrapi-openapi.json: declared missing tag: reference",
     "edgrapi-openapi.json: declared missing tag: search",
     "edgrapi-openapi.json: declared missing tag: xbrl",
-    "apis.yml register: written (+12 apis, 12 total)"
+    "apis.yml register: already-registered"
   ],
-  "skipped": []
+  "skipped": [
+    "edgrapi-activist-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "edgrapi-events-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "edgrapi-filings-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "edgrapi-fundamentals-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "edgrapi-government-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "edgrapi-holdings-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "edgrapi-insider-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "edgrapi-meta-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "edgrapi-reference-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "edgrapi-search-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "edgrapi-webhooks-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "edgrapi-xbrl-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }
