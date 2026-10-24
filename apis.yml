@@ -27,6 +27,11 @@ tags:
 - Company
 - Data
 - Government
+- Artificial Intelligence
+tags_raw:
+- Company
+- Data
+- Government
 - API
 - AI
 
@@ -127,6 +132,8 @@ apis:
   description: 8-K material events with parsed item codes.
   humanURL: https://edgrapi.com/docs
   tags:
+  - Event
+  tags_raw:
   - events
   properties:
   - type: OpenAPI
@@ -136,6 +143,8 @@ apis:
   description: Filing history & 10-K/10-Q sections.
   humanURL: https://edgrapi.com/docs
   tags:
+  - Filings
+  tags_raw:
   - filings
   properties:
   - type: OpenAPI
@@ -145,6 +154,8 @@ apis:
   description: Financial statements & ratios.
   humanURL: https://edgrapi.com/docs
   tags:
+  - Fundamentals
+  tags_raw:
   - fundamentals
   properties:
   - type: OpenAPI
@@ -154,6 +165,8 @@ apis:
   description: 'US government data beyond the SEC: federal contract opportunities and more.'
   humanURL: https://edgrapi.com/docs
   tags:
+  - Government
+  tags_raw:
   - government
   properties:
   - type: OpenAPI
@@ -163,6 +176,8 @@ apis:
   description: The holdings API from Paper and Beyond — 1 operation(s) for holdings.
   humanURL: https://edgrapi.com/docs
   tags:
+  - Holdings
+  tags_raw:
   - holdings
   properties:
   - type: OpenAPI
@@ -172,6 +187,8 @@ apis:
   description: Parsed Form 4 insider trades and the market-wide buy feed.
   humanURL: https://edgrapi.com/docs
   tags:
+  - Insider
+  tags_raw:
   - insider
   properties:
   - type: OpenAPI
@@ -181,6 +198,8 @@ apis:
   description: Health & discovery.
   humanURL: https://edgrapi.com/docs
   tags:
+  - Meta
+  tags_raw:
   - meta
   properties:
   - type: OpenAPI
@@ -190,6 +209,8 @@ apis:
   description: The reference API from Paper and Beyond — 2 operation(s) for reference.
   humanURL: https://edgrapi.com/docs
   tags:
+  - Reference
+  tags_raw:
   - reference
   properties:
   - type: OpenAPI
@@ -199,6 +220,8 @@ apis:
   description: The search API from Paper and Beyond — 1 operation(s) for search.
   humanURL: https://edgrapi.com/docs
   tags:
+  - Search
+  tags_raw:
   - search
   properties:
   - type: OpenAPI
@@ -208,6 +231,8 @@ apis:
   description: Get a signed POST the moment a watched company files.
   humanURL: https://edgrapi.com/docs
   tags:
+  - Webhook
+  tags_raw:
   - webhooks
   properties:
   - type: OpenAPI
@@ -217,6 +242,8 @@ apis:
   description: The xbrl API from Paper and Beyond — 2 operation(s) for xbrl.
   humanURL: https://edgrapi.com/docs
   tags:
+  - XBRL
+  tags_raw:
   - xbrl
   properties:
   - type: OpenAPI

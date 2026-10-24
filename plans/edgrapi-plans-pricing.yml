@@ -88,3 +88,59 @@ plans:
   - name: credits
     limit_text: 50,000 credits
 docs: https://edgrapi.com/pricing
+x-canonical:
+  generated: '2026-10-23'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models:
+  - free
+  - subscription
+  units: []
+  plans:
+  - name: Free
+    access: other
+    model: free
+    model_how: derived
+    units: []
+    periods: []
+  - name: Starter
+    access: other
+    model: subscription
+    model_how: derived
+    units: []
+    periods: []
+  - name: Pro (monthly)
+    access: other
+    model: subscription
+    model_how: derived
+    units: []
+    periods: []
+  - name: Pro (annual)
+    access: other
+    model: subscription
+    model_how: derived
+    units: []
+    periods: []
+  - name: Business
+    access: other
+    model: subscription
+    model_how: derived
+    units: []
+    periods: []
+  - name: Pay as you go – 5,000 credits
+    access: other
+    model: subscription
+    model_how: derived
+    units: []
+    periods: []
+  - name: Pay as you go – 15,000 credits
+    access: other
+    model: subscription
+    model_how: derived
+    units: []
+    periods: []
+  - name: Pay as you go – 50,000 credits
+    access: other
+    model: subscription
+    model_how: derived
+    units: []
+    periods: []
