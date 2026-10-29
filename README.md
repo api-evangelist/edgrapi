@@ -64,5 +64,139 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Paper and Beyond is a company surfaced via the API Evangelist harvest backlog (source: g2-catalog) and added to the network as a stub for full-pipeline profiling.
-- https://edgrapi.com/
+Paper and Beyond provides a US Government Data API for developers and AI agents, aggregating data from SAM.gov contracts, USAspending awards, Grants.gov, Congress trades, and SEC EDGAR into a single JSON schema. The service offers a hosted MCP server with a free tier, no credit card required, and supports REST access. It targets AI agents and developers needing comprehensive federal data via a unified API.
+
+**Areas:** Company · Data · Government · Artificial Intelligence
+
+## Paper and Beyond on APIs.io
+
+Everything profiled for Paper and Beyond is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/edgrapi/](https://apis.io/providers/edgrapi/)** — or go straight to one of the APIs or properties below.
+
+### APIs (12)
+
+- [Paper and Beyond Activist API](https://apis.io/apis/edgrapi/edgrapi-activist-api/) — The activist API from Paper and Beyond — 1 operation(s) for activist.
+- [Paper and Beyond Events API](https://apis.io/apis/edgrapi/edgrapi-events-api/) — 8-K material events with parsed item codes.
+- [Paper and Beyond Filings API](https://apis.io/apis/edgrapi/edgrapi-filings-api/) — Filing history & 10-K/10-Q sections.
+- [Paper and Beyond Fundamentals API](https://apis.io/apis/edgrapi/edgrapi-fundamentals-api/) — Financial statements & ratios.
+- [Paper and Beyond Government API](https://apis.io/apis/edgrapi/edgrapi-government-api/) — US government data beyond the SEC: federal contract opportunities and more.
+- [Paper and Beyond Holdings API](https://apis.io/apis/edgrapi/edgrapi-holdings-api/) — The holdings API from Paper and Beyond — 1 operation(s) for holdings.
+- [Paper and Beyond Insider API](https://apis.io/apis/edgrapi/edgrapi-insider-api/) — Parsed Form 4 insider trades and the market-wide buy feed.
+- [Paper and Beyond Meta API](https://apis.io/apis/edgrapi/edgrapi-meta-api/) — Health & discovery.
+- [Paper and Beyond Reference API](https://apis.io/apis/edgrapi/edgrapi-reference-api/) — The reference API from Paper and Beyond — 2 operation(s) for reference.
+- [Paper and Beyond Search API](https://apis.io/apis/edgrapi/edgrapi-search-api/) — The search API from Paper and Beyond — 1 operation(s) for search.
+- [Paper and Beyond Webhooks API](https://apis.io/apis/edgrapi/edgrapi-webhooks-api/) — Get a signed POST the moment a watched company files.
+- [Paper and Beyond Xbrl API](https://apis.io/apis/edgrapi/edgrapi-xbrl-api/) — The xbrl API from Paper and Beyond — 2 operation(s) for xbrl.
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### Agentic access (1)
+
+Which operations an agent can call, which act, and which need a human in the loop.
+
+- [Edgrapi Agentic Access](https://apis.io/agentic-access/edgrapi/edgrapi-agentic-access/)
+
+#### JSON-LD (1)
+
+Linked-data contexts for the provider's vocabulary.
+
+- [Edgrapi Context](https://apis.io/jsonld/edgrapi/edgrapi-context/)
+
+#### Governance rules (1)
+
+Spectral rulesets for the provider's contracts.
+
+- [Paper and Beyond API Rules](https://apis.io/rules/edgrapi/edgrapi-rules/)
+
+#### Security (3)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Edgrapi Authentication](https://apis.io/security/edgrapi/edgrapi-authentication/)
+- [Edgrapi Domain Security](https://apis.io/security/edgrapi/edgrapi-domain-security/)
+- [Edgrapi Vulnerability Disclosure](https://apis.io/security/edgrapi/edgrapi-vulnerability-disclosure/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Edgrapi Plans Pricing](https://apis.io/plans/edgrapi/edgrapi-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Edgrapi Rate Limits](https://apis.io/rate-limits/edgrapi/edgrapi-rate-limits/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://edgrapi.com/)
+- [Documentation](https://edgrapi.com/docs)
+- [Getting started](https://edgrapi.com/docs)
+- [API reference](https://edgrapi.com/swagger)
+- [Pricing](https://edgrapi.com/pricing)
+- [Sign up](https://edgrapi.com/app)
+- [Support](https://edgrapi.com/contact)
+- [Blog](https://edgrapi.com/blog)
+- [Security](https://edgrapi.com/contact)
+- [Terms of service](https://edgrapi.com/terms)
+- [Privacy policy](https://edgrapi.com/privacy)
+- [Status](https://edgrapi.com/status)
+
+## API Evangelist rating
+
+**Kin Score 57.0** — strong · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 58.3 |
+| Contract quality | 45.8 |
+| Contract governance | 22.0 |
+| Operational transparency | 47.4 |
+| Developer ergonomics | 70.8 |
+| Access clarity | 76.3 |
+
+**Agent readiness 52.5** — agent-ready (gated down from agent-native)
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | documented (partial credit) |
+| Auth Clarity | served (partial credit) |
+| Idempotency | — |
+| Error Semantics | verified |
+| OpenAPI Examples | partial |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | yes |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | served (partial credit) |
+| Protected Resource Metadata | verified |
+| Dynamic Client Registration | yes |
+| Agentic Commerce | — |
+| Pagination Ratio | na |
+| Operation Distinctiveness | distinct |
+
+**Regulatory alignment 28.2** — Government & Public Sector
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/edgrapi/](https://apis.io/providers/edgrapi/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Paper and Beyond: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/edgrapi/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
